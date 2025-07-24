@@ -94,19 +94,20 @@ RCT_EXPORT_METHOD(speak:(NSString *)text
     resolve([NSNumber numberWithUnsignedLong:utterance.hash]);
 }
 
-RCT_EXPORT_METHOD(stop:(BOOL *)onWordBoundary resolve:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(stop:(NSNumber * _Nullable)onWordBoundary
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 {
     AVSpeechBoundary boundary;
 
-    if(onWordBoundary != NULL && onWordBoundary) {
+    if (onWordBoundary != nil && [onWordBoundary boolValue]) {
         boundary = AVSpeechBoundaryWord;
     } else {
         boundary = AVSpeechBoundaryImmediate;
     }
 
     BOOL stopped = [self.synthesizer stopSpeakingAtBoundary:boundary];
-
-    resolve([NSNumber numberWithBool:stopped]);
+    resolve(@(stopped));
 }
 
 RCT_EXPORT_METHOD(pause:(BOOL *)onWordBoundary resolve:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
